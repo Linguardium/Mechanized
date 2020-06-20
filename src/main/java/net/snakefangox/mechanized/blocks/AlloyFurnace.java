@@ -8,6 +8,7 @@ import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
@@ -19,6 +20,8 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.AlloyFurnaceEntity;
+
+import static net.snakefangox.mechanized.MRegister.ALLOY_FURNACE_SCREEN_HANDLER;
 
 public class AlloyFurnace extends Block implements BlockEntityProvider {
 
@@ -37,8 +40,7 @@ public class AlloyFurnace extends Block implements BlockEntityProvider {
 
 		BlockEntity be = world.getBlockEntity(pos);
 		if (be != null && be instanceof AlloyFurnaceEntity) {
-			ContainerProviderRegistry.INSTANCE.openContainer(MRegister.ALLOY_FURNACE_CONTAINER, player,
-					(packetByteBuf -> packetByteBuf.writeBlockPos(pos)));
+			player.openHandledScreen((NamedScreenHandlerFactory) be);
 		}
 
 		return ActionResult.SUCCESS;
@@ -51,11 +53,6 @@ public class AlloyFurnace extends Block implements BlockEntityProvider {
 		if (be instanceof AlloyFurnaceEntity) {
 			((AlloyFurnaceEntity) be).dropEverything(world, pos);
 		}
-	}
-
-	@Override
-	public int getLuminance(BlockState state) {
-		return state.get(LIT) ? 10 : 0;
 	}
 
 	@Override

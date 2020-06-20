@@ -12,7 +12,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.DefaultedList;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -74,7 +74,7 @@ public class SteamPistonEntity extends AbstractSteamEntity {
 				if (tag.contains("Items") && tag.get("Items") instanceof ListTag)
 					InventoryTools.toTagIncEmpty(tag,
 							DefaultedList.ofSize(tag.getList("Items", 10).size(), ItemStack.EMPTY), true);
-				be.fromTag(tag);
+				be.fromTag(state, tag);
 			}
 			if (isAnvil)
 				fallingBlock.setHurtEntities(true);
@@ -106,8 +106,8 @@ public class SteamPistonEntity extends AbstractSteamEntity {
 	}
 
 	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
+	public void fromTag(BlockState state, CompoundTag tag) {
+		super.fromTag(state, tag);
 		retractTimer = tag.getInt("retractTimer");
 		extended = tag.getBoolean("extended");
 		powered = tag.getBoolean("powered");

@@ -1,19 +1,22 @@
 package net.snakefangox.mechanized.gui;
 
-import io.github.cottonmc.cotton.gui.CottonCraftingController;
+import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
 import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen;
 import io.github.cottonmc.cotton.gui.widget.WBar;
 import io.github.cottonmc.cotton.gui.widget.WBar.Direction;
 import io.github.cottonmc.cotton.gui.widget.WGridPanel;
-import net.minecraft.container.BlockContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.text.Text;
 
-public class SteamGaugeContainer extends CottonCraftingController {
+import static net.snakefangox.mechanized.MRegister.STEAM_GAUGE_SCREEN_HANDLER;
 
-	public SteamGaugeContainer(int syncID, PlayerInventory playerInventory, BlockContext context) {
-		super(RecipeType.SMELTING, syncID, playerInventory, getBlockInventory(context),
+public class SteamGaugeContainer extends SyncedGuiDescription {
+
+	public SteamGaugeContainer(int syncID, PlayerInventory playerInventory, ScreenHandlerContext context) {
+		super(STEAM_GAUGE_SCREEN_HANDLER, syncID, playerInventory, getBlockInventory(context),
 				getBlockPropertyDelegate(context));
 		WGridPanel root = new WGridPanel();
 		setRootPanel(root);
@@ -28,8 +31,8 @@ public class SteamGaugeContainer extends CottonCraftingController {
 	}
 
 	public static class SteamGaugeScreen extends CottonInventoryScreen<SteamGaugeContainer> {
-		public SteamGaugeScreen(SteamGaugeContainer container, PlayerEntity player) {
-			super(container, player);
+		public SteamGaugeScreen(SteamGaugeContainer container, PlayerInventory playerInv, Text text) {
+			super(container, playerInv.player);
 		}
 	}
 }

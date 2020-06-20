@@ -1,13 +1,14 @@
 package net.snakefangox.mechanized.blocks.entity;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.AutomaticItemPlacementContext;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.DefaultedList;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.MRegister;
@@ -41,7 +42,7 @@ public class PlacerEntity extends AbstractSteamEntity implements StandardInvento
 			ItemStack stack = block.get(0);
 			if (world.isAir(placepos) && !stack.isEmpty() && stack.getItem() instanceof BlockItem) {
 				Block bl = ((BlockItem) stack.getItem()).getBlock();
-				if (bl.getHardness(bl.getDefaultState(), world, placepos) < 0)
+				if (bl.getDefaultState().getHardness(world, placepos) < 0)
 					return;
 				((BlockItem) stack.getItem()).place(
 						new AutomaticItemPlacementContext(world, placepos, getCachedState().get(Properties.FACING),
@@ -65,8 +66,8 @@ public class PlacerEntity extends AbstractSteamEntity implements StandardInvento
 	}
 
 	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
+	public void fromTag(BlockState state, CompoundTag tag) {
+		super.fromTag(state, tag);
 		Inventories.toTag(tag, getItems());
 		extended = tag.getBoolean("extended");
 	}
@@ -84,7 +85,7 @@ public class PlacerEntity extends AbstractSteamEntity implements StandardInvento
 	}
 
 	@Override
-	public boolean isValidInvStack(int slot, ItemStack stack) {
+	public boolean isValid(int slot, ItemStack stack) {
 		return stack.getItem() instanceof BlockItem;
 	}
 }

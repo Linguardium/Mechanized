@@ -1,7 +1,17 @@
 package net.snakefangox.mechanized.blocks.entity;
 
 import alexiil.mc.lib.attributes.fluid.amount.FluidAmount;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.snakefangox.mechanized.MRegister;
+import net.snakefangox.mechanized.gui.SteamBoilerContainer;
 import net.snakefangox.mechanized.steam.Steam;
 
 public class BlastBoilerEntity extends AbstractSteamBoilerEntity {
@@ -27,5 +37,20 @@ public class BlastBoilerEntity extends AbstractSteamBoilerEntity {
 	@Override
 	protected void extractTick() {
 		fuel = Math.max(0, fuel - FUEL_PER_OP);
+	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public Text getDisplayName() {
+		return world.getBlockState(pos).getBlock().getName();
+	}
+
+	@Override
+	public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
+		return new SteamBoilerContainer(syncId, inv, ScreenHandlerContext.create(world,pos));
+	}
+	@Override
+	public void writeScreenOpeningData(ServerPlayerEntity serverPlayerEntity, PacketByteBuf packetByteBuf) {
+		packetByteBuf.writeBlockPos(pos);
 	}
 }

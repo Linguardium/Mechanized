@@ -1,18 +1,21 @@
 package net.snakefangox.mechanized.gui;
 
-import io.github.cottonmc.cotton.gui.CottonCraftingController;
+import io.github.cottonmc.cotton.gui.SyncedGuiDescription;
 import io.github.cottonmc.cotton.gui.client.CottonInventoryScreen;
 import io.github.cottonmc.cotton.gui.widget.WGridPanel;
 import io.github.cottonmc.cotton.gui.widget.WItemSlot;
-import net.minecraft.container.BlockContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.recipe.RecipeType;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.text.Text;
 
-public class PlacerContainer extends CottonCraftingController {
+import static net.snakefangox.mechanized.MRegister.PLACER_CONTAINER_SCREEN_HANDLER;
 
-	public PlacerContainer(int syncID, PlayerInventory playerInventory, BlockContext context) {
-		super(RecipeType.SMELTING, syncID, playerInventory, getBlockInventory(context),
+public class PlacerContainer extends SyncedGuiDescription {
+
+	public PlacerContainer(int syncID, PlayerInventory playerInventory, ScreenHandlerContext context) {
+		super(PLACER_CONTAINER_SCREEN_HANDLER, syncID, playerInventory, getBlockInventory(context),
 				getBlockPropertyDelegate(context));
 		WGridPanel root = new WGridPanel();
 		setRootPanel(root);
@@ -26,8 +29,8 @@ public class PlacerContainer extends CottonCraftingController {
 	}
 
 	public static class PlacerScreen extends CottonInventoryScreen<PlacerContainer> {
-		public PlacerScreen(PlacerContainer container, PlayerEntity player) {
-			super(container, player);
+		public PlacerScreen(PlacerContainer container, PlayerInventory playerInventory, Text text) {
+			super(container,playerInventory.player, text);
 		}
 	}
 }

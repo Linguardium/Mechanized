@@ -7,16 +7,16 @@ import net.fabricmc.fabric.impl.content.registry.FuelRegistryImpl;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.InventoryProvider;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.container.PropertyDelegate;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.DefaultedList;
+import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.util.Tickable;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.WorldAccess;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.AlloyFurnace;
 import net.snakefangox.mechanized.blocks.SteamBoiler;
@@ -104,8 +104,8 @@ public class AlloyFurnaceEntity extends BlockEntity
 	}
 
 	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
+	public void fromTag(BlockState state, CompoundTag tag) {
+		super.fromTag(state, tag);
 		Inventories.fromTag(tag, inventory);
 		fuel = tag.getInt("fuel");
 		maxFuel = tag.getInt("maxFuel");
@@ -113,7 +113,7 @@ public class AlloyFurnaceEntity extends BlockEntity
 	}
 
 	@Override
-	public int[] getInvAvailableSlots(Direction side) {
+	public int[] getAvailableSlots(Direction side) {
 		if (side == Direction.DOWN) {
 			return OUTPUT_SLOT;
 		} else {
@@ -122,7 +122,7 @@ public class AlloyFurnaceEntity extends BlockEntity
 	}
 
 	@Override
-	public boolean isValidInvStack(int slot, ItemStack stack) {
+	public boolean isValid(int slot, ItemStack stack) {
 		if (slot == OUTPUT_SLOT[0])
 			return false;
 		if(slot == FUEL_SLOT[0])
@@ -131,7 +131,7 @@ public class AlloyFurnaceEntity extends BlockEntity
 	}
 
 	@Override
-	public boolean canInsertInvStack(int slot, ItemStack stack, Direction dir) {
+	public boolean canInsert(int slot, ItemStack stack, Direction dir) {
 		if (slot == OUTPUT_SLOT[0])
 			return false;
 		if(slot == FUEL_SLOT[0])
@@ -140,7 +140,7 @@ public class AlloyFurnaceEntity extends BlockEntity
 	}
 
 	@Override
-	public boolean canExtractInvStack(int slot, ItemStack stack, Direction dir) {
+	public boolean canExtract(int slot, ItemStack stack, Direction dir) {
 		return slot == OUTPUT_SLOT[0];
 	}
 
@@ -150,7 +150,7 @@ public class AlloyFurnaceEntity extends BlockEntity
 	}
 
 	@Override
-	public SidedInventory getInventory(BlockState state, IWorld world, BlockPos pos) {
+	public SidedInventory getInventory(BlockState state, WorldAccess world, BlockPos pos) {
 		return this;
 	}
 

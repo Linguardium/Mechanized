@@ -3,10 +3,12 @@ package net.snakefangox.mechanized.mixin;
 import java.util.Collection;
 import java.util.Iterator;
 
+import net.minecraft.client.util.math.MatrixStack;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -44,10 +46,10 @@ public abstract class EffectRenderMixin implements Inventory, Nameable {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Inject(at = @At(value = "JUMP", opcode = Opcodes.IRETURN, ordinal = 0), method = "drawStatusEffects", cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
-	public void drawEffects(CallbackInfo info, int i, Collection collection) {
-		collection.removeIf(eff -> (((StatusEffectInstance)eff).getEffectType() instanceof HiddenEffect));
+	@ModifyVariable(at = @At(value = "STORE"), method = "drawStatusEffects",name="collection")
+	private Collection<StatusEffectInstance> hideEffects(Collection<StatusEffectInstance> collection) {
+		Collection<StatusEffectInstance> c = collection;
+		c.removeIf(eff -> (eff.getEffectType() instanceof HiddenEffect));
+		return c;
 	}
-
 }

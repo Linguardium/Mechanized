@@ -7,13 +7,17 @@ import alexiil.mc.lib.attributes.fluid.volume.FluidKey;
 import alexiil.mc.lib.attributes.fluid.volume.FluidKeys;
 import alexiil.mc.lib.attributes.fluid.volume.FluidVolume;
 import io.github.cottonmc.cotton.gui.PropertyDelegateHolder;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.impl.content.registry.FuelRegistryImpl;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.container.PropertyDelegate;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.DefaultedList;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandlerFactory;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.snakefangox.mechanized.blocks.SteamBoiler;
 import net.snakefangox.mechanized.parts.StandardInventory;
@@ -21,7 +25,7 @@ import net.snakefangox.mechanized.steam.Steam;
 import net.snakefangox.mechanized.steam.SteamUtil;
 import net.snakefangox.mechanized.tools.InventoryTools;
 
-public abstract class AbstractSteamBoilerEntity extends AbstractSteamEntity implements StandardInventory, PropertyDelegateHolder {
+public abstract class AbstractSteamBoilerEntity extends AbstractSteamEntity implements StandardInventory, PropertyDelegateHolder, ExtendedScreenHandlerFactory {
 
 	private static final FluidAmount TANK_CAPACITY = FluidAmount.ofWhole(3);
 	private static final int STEAM_TANK_CAPACITY = 3 * Steam.UNIT;
@@ -91,8 +95,8 @@ public abstract class AbstractSteamBoilerEntity extends AbstractSteamEntity impl
 	}
 
 	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
+	public void fromTag(BlockState state, CompoundTag tag) {
+		super.fromTag(state, tag);
 		Inventories.fromTag(tag, inventory);
 		fuel = tag.getInt("fuel");
 		maxFuel = tag.getInt("maxFuel");

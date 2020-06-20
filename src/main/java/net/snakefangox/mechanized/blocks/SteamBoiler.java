@@ -19,6 +19,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
@@ -61,8 +62,7 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 						player.setStackInHand(hand, new ItemStack(Items.BUCKET));
 				}
 			} else {
-				ContainerProviderRegistry.INSTANCE.openContainer(MRegister.STEAM_BOILER_CONTAINER, player,
-						(packetByteBuf -> packetByteBuf.writeBlockPos(pos)));
+				player.openHandledScreen((NamedScreenHandlerFactory)be);
 			}
 		}
 
@@ -72,11 +72,6 @@ public class SteamBoiler extends Block implements BlockEntityProvider, Attribute
 	@Override
 	public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
 
-	}
-
-	@Override
-	public int getLuminance(BlockState state) {
-		return state.get(LIT) ? 10 : 0;
 	}
 
 	@Override

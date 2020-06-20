@@ -15,7 +15,7 @@ public class SteamToolMaterial implements ToolMaterial {
 	}
 
 	@Override
-	public float getMiningSpeed() {
+	public float getMiningSpeedMultiplier() {
 		return 10.0f;
 	}
 

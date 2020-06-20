@@ -15,7 +15,7 @@ import net.minecraft.state.StateManager.Builder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.WorldAccess;
 import net.snakefangox.mechanized.MRegister;
 import net.snakefangox.mechanized.blocks.entity.SteamCondenserEntity;
 
@@ -42,7 +42,7 @@ public class SteamCondenser extends Block implements BlockEntityProvider, FluidD
 	}
 
 	@Override
-	public Fluid tryDrainFluid(IWorld world, BlockPos pos, BlockState state) {
+	public Fluid tryDrainFluid(WorldAccess world, BlockPos pos, BlockState state) {
 		if (world.getBlockEntity(pos) instanceof SteamCondenserEntity) {
 			SteamCondenserEntity be = (SteamCondenserEntity) world.getBlockEntity(pos);
 			if (be.tank.attemptAnyExtraction(FluidAmount.BUCKET, Simulation.SIMULATE).getAmount_F()

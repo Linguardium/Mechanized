@@ -5,7 +5,7 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.EntityContext;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -47,7 +47,7 @@ public class SteamCharger extends Block implements BlockEntityProvider {
 				((SteamChargerEntity) be).sync();
 			}else if(held.isEmpty() && !((SteamChargerEntity) be).getItems().get(0).isEmpty()) {
 				player.setStackInHand(hand, ((SteamChargerEntity) be).getItems().get(0));
-				((SteamChargerEntity) be).setInvStack(0, ItemStack.EMPTY);
+				((SteamChargerEntity) be).setStack(0, ItemStack.EMPTY);
 				((SteamChargerEntity) be).sync();
 			}
 		}
@@ -55,7 +55,7 @@ public class SteamCharger extends Block implements BlockEntityProvider {
 	}
 
 	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext context) {
+	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
 		return BOX;
 	}
 

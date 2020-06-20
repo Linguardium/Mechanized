@@ -1,6 +1,8 @@
 package net.snakefangox.mechanized;
 
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.registry.RegistryEntryAddedCallback;
@@ -34,10 +36,11 @@ public class Mechanized implements ModInitializer, ClientModInitializer {
 		}
 
 		if (FabricLoader.getInstance().isDevelopmentEnvironment())
-			AutoGenJson.autoGenerateJson(MODID, "D:\\Code\\Fabric_mods\\Mechanized");
+			AutoGenJson.autoGenerateJson(MODID, FabricLoader.getInstance().getGameDirectory().toString()+"/../");
 	}
 
 	@Override
+	@Environment(EnvType.CLIENT)
 	public void onInitializeClient() {
 		MClientRegister.registerClient();
 	}

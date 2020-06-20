@@ -1,13 +1,21 @@
 package net.snakefangox.mechanized.blocks;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry;
+import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.entity.EntityContext;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.screen.*;
 import net.minecraft.state.StateManager.Builder;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -18,6 +26,8 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.snakefangox.mechanized.MRegister;
+import net.snakefangox.mechanized.gui.SteamBoilerContainer;
+import net.snakefangox.mechanized.gui.UpgradeTableContainer;
 
 public class UpgradeTable extends Block {
 
@@ -32,13 +42,13 @@ public class UpgradeTable extends Block {
 			BlockHitResult hit) {
 		if (world.isClient)
 			return ActionResult.SUCCESS;
-		ContainerProviderRegistry.INSTANCE.openContainer(MRegister.UPGRADE_TABLE_CONTAINER, player,
-				(packetByteBuf -> packetByteBuf.writeBlockPos(pos)));
+
+		player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
 		return ActionResult.SUCCESS;
 	}
 
 	@Override
-	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, EntityContext context) {
+	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
 		return MAIN_BOX;
 	}
 
@@ -51,5 +61,13 @@ public class UpgradeTable extends Block {
 	@Override
 	protected void appendProperties(Builder<Block, BlockState> builder) {
 		builder.add(HorizontalFacingBlock.FACING);
+	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+		return new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) -> {
+			return new UpgradeTableContainer(i, playerInventory);
+		}, new LiteralText(""));
 	}
 }

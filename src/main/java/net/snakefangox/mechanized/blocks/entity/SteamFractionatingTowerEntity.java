@@ -70,7 +70,7 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 				pos.getZ() + ((MINE_DIAMETER / 2) - RAND.nextInt(MINE_DIAMETER)));
 		BlockState blockState = world.getBlockState(minePos);
 		if (!world.isAir(minePos)
-				&& (blockState.getMaterial() == Material.STONE || blockState.getMaterial() == Material.SAND)) {
+				&& (blockState.getMaterial() == Material.STONE || blockState.getMaterial() == Material.AGGREGATE)) {
 			BlockEntity blockEntity = blockState.getBlock().hasBlockEntity() ? world.getBlockEntity(minePos) : null;
 			Block.dropStacks(blockState, world, minePos, blockEntity, null, ItemStack.EMPTY);
 			if (RAND.nextFloat() > BREAK_CHANCE && pos.getX() != minePos.getX() && pos.getZ() != minePos.getZ())
@@ -88,12 +88,12 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 
 	private boolean checkIsPositionValid() {
 		boolean foundBedrock = false;
-		BlockPos.Mutable searchPos = new BlockPos.Mutable(pos);
+		BlockPos.Mutable searchPos = pos.mutableCopy();
 		for (int i = pos.getY(); i >= 0; i--) {
 			searchPos.set(searchPos.getX(), searchPos.getY() - 1, searchPos.getZ());
 			BlockState state = world.getBlockState(searchPos);
 			Block atPos = state.getBlock();
-			if (atPos.getMaterial(state) == Material.STONE)
+			if (state.getMaterial() == Material.STONE)
 				stoneLevel = i;
 			if (atPos == Blocks.BEDROCK) {
 				foundBedrock = true;
@@ -145,8 +145,8 @@ public class SteamFractionatingTowerEntity extends AbstractSteamEntity {
 	}
 
 	@Override
-	public void fromTag(CompoundTag tag) {
-		super.fromTag(tag);
+	public void fromTag(BlockState state, CompoundTag tag) {
+		super.fromTag(state, tag);
 		level = tag.getInt("level");
 	}
 

@@ -55,8 +55,8 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 	}
 
 	@Override
-	public float getMiningSpeed(ItemStack stack, BlockState state) {
-		return getPressure(stack) * getMaterial().getMiningSpeed();
+	public float getMiningSpeedMultiplier(ItemStack stack, BlockState state) {
+		return getPressure(stack) * getMaterial().getMiningSpeedMultiplier();
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 			if (block != Blocks.IRON_BLOCK && block != Blocks.IRON_ORE && block != Blocks.LAPIS_BLOCK
 					&& block != Blocks.LAPIS_ORE) {
 				Material material = state.getMaterial();
-				return material == Material.STONE || material == Material.METAL || material == Material.ANVIL;
+				return material == Material.STONE || material == Material.METAL || material == Material.REPAIR_STATION;
 			} else {
 				return i >= 1;
 			}
@@ -204,6 +204,6 @@ public class SteamDrill extends PickaxeItem implements SteamItem, Upgradable, Dy
 
 	@Override
 	public float getMiningSpeedMultiplier(ItemStack stack, LivingEntity user) {
-		return getPressure(stack) * getMaterial().getMiningSpeed();
+		return getPressure(stack) * getMaterial().getMiningSpeedMultiplier();
 	}
 }

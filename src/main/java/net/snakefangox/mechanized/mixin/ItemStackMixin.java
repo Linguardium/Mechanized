@@ -20,10 +20,10 @@ public abstract class ItemStackMixin {
 
 	// Sorry it had to come to this FabricAPI but the way you do the break check
 	// doesn't work for me
-	@Inject(at = @At("HEAD"), method = "getMiningSpeed", cancellable = true)
+	@Inject(at = @At("HEAD"), method = "getMiningSpeedMultiplier", cancellable = true)
 	public void getItemBreakSpeed(BlockState state, CallbackInfoReturnable<Float> info) {
 		if (getItem() instanceof SteamDrill) {
-			info.setReturnValue(MRegister.STEAM_DRILL.getMiningSpeed((ItemStack) (Object) this, state));
+			info.setReturnValue(MRegister.STEAM_DRILL.getMiningSpeedMultiplier((ItemStack) (Object) this, state));
 			info.cancel();
 		}
 	}
